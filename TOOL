@@ -1,0 +1,70 @@
+cd NGNX  # Or wherever you cloned it
+
+# Create the calculator script
+cat > tools/grandkids_calculator.py << 'EOF'
+#!/usr/bin/env python3
+"""
+NGNX Grandkids Farmed Calculator
+While point farmers go linear, Grandpa compounds exponentially.
+"""
+
+import sys
+
+def calculate_grandkids(starting_amount: float, growth_rate: float = 0.10, generations: int = 3) -> dict:
+    results = {}
+    current = starting_amount
+    labels = ["You (Boomer Era)", "Kids (Gen X)", "Grandkids (Millennials)", "Great-Grandkids (Zoomers)"]
+    
+    for gen in range(generations + 1):
+        label = labels[gen] if gen < len(labels) else f"Generation {gen}"
+        results[label] = current
+        current *= (1 + growth_rate)
+    
+    return results
+
+def main():
+    print("🧔‍♂️ $NGNX Grandkids Farmer 🧔‍♂️")
+    print("While Pepe farms airdrops, Grandpa farms GRANDKIDS\n")
+    
+    try:
+        starting = float(input("Starting bag size (e.g., 1000000 tokens): ") or 1000000)
+        rate = float(input("Annual compounding rate (e.g., 0.10 for 10%): ") or 0.10)
+        gens = int(input("Generations to simulate (default 3): ") or 3)
+    except:
+        print("Invalid input – using defaults.")
+        starting, rate, gens = 1000000.0, 0.10, 3
+    
+    results = calculate_grandkids(starting, rate, gens)
+    
+    print("\n📈 Compounding Results:")
+    for gen, amount in results.items():
+        print(f"  {gen}: {amount:,.0f} tokens")
+    
+    grandkids = results.get("Grandkids (Millennials)", list(results.values())[-2])
+    print(f"\n🚀 Grandkids farmed: {grandkids:,.0f} tokens — legacy secured, frog rekt!")
+
+if __name__ == "__main__":
+    main()
+EOF
+
+# Create a tools directory if needed and move the file
+mkdir -p tools
+mv grandkids_calculator.py tools/
+
+# Add example output
+cat > tools/example.txt << 'EOF'
+Example Run (10% compounding):
+Starting: 1,000,000 tokens
+
+You (Boomer Era): 1,000,000
+Kids (Gen X): 1,100,000
+Grandkids (Millennials): 1,210,000
+Great-Grandkids (Zoomers): 1,331,000
+
+Grandkids farmed: 1,210,000 — outlasting the degen farmers!
+EOF
+
+# Commit and push
+git add tools/
+git commit -m "feat(tools): add Grandkids Farmed calculator + example"
+git push origin main
